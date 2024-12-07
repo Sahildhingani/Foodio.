@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 function Footer() {
   return (
     <div className="bg-black w-full py-10">
@@ -46,26 +46,25 @@ function Footer() {
         {/* Part 2: Page Links */}
         <div className="flex flex-col gap-2 mt-8 md:mt-0">
           <h1 className="text-red-600 font-bold text-lg">Pages</h1>
-          <a href="/" className="text-white font-semibold text-sm md:text-base">Home</a>
-          <a href="/Menu" className="text-white font-semibold text-sm md:text-base">Menu</a>
-          <a href="/OrderOnline" className="text-white font-semibold text-sm md:text-base">Order Online</a>
-          <a href="/Catering" className="text-white font-semibold text-sm md:text-base">Catering</a>
-          <a href="/Reservation" className="text-white font-semibold text-sm md:text-base">Reservation</a>
-        </div>
+          <Link to="/" className="text-white font-semibold text-sm md:text-base">Home</Link>
+          <Link to="/OrderOnline" className="text-white font-semibold text-sm md:text-base">Order Online</Link>
+          <Link to="/Catering" className="text-white font-semibold text-sm md:text-base">Catering</Link>
+          <Link to="/Reservation" className="text-white font-semibold text-sm md:text-base">Reservation</Link>
+        </div>  
 
         {/* Part 3: Information Links */}
         <div className="flex flex-col gap-2 mt-8 md:mt-0">
           <h1 className="text-red-600 font-bold text-lg">Information</h1>
-          <a href="/Aboutus" className="text-white font-semibold text-sm md:text-base">About Us</a>
-          <a href="/Testimonial" className="text-white font-semibold text-sm md:text-base">Testimonial</a>
-          <a href="/Events" className="text-white font-semibold text-sm md:text-base">Events</a>
+          <Link to="/Aboutus" className="text-white font-semibold text-sm md:text-base">About Us</Link>
+          <Link to="/Testimonial" className="text-white font-semibold text-sm md:text-base">Testimonial</Link>
+          <Link to="/Events" className="text-white font-semibold text-sm md:text-base">Events</Link>
         </div>
 
         {/* Part 4: Contact Information */}
         <div className="flex flex-col gap-2 mt-8 md:mt-0">
           <h1 className="text-red-600 font-bold text-lg">Get in Touch</h1>
           <p className="text-white text-sm md:text-base">sahildhingani51@gmail.com</p>
-          <p className="text-white text-sm md:text-base">+123 4567 8945</p>
+          <p className="text-white text-sm md:text-base">+91 7976789806</p>
         </div>
       </div>
 

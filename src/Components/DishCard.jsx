@@ -1,24 +1,38 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { add } from "../app/Slices";
-import store from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { add, increase } from "../app/Slices"; // Assuming you have an `updateCount` action in your slice
 
 function DishCard({ dishname, imageid, Detail, Rating, Price }) {
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.items); // Access cart items from the Redux store
 
   function onclickhandler() {
-    // Dispatch the `add` action with the dish details as a payload object
-    dispatch(
-      add({
-        dishname,
-        imageid,
-        Detail,
-        Rating,
-        Price,
-        cnt: 1, // Initialize the count to 1 when adding to the cart
-      })
-    );
-    console.log("element dispatched");
+    // Check if the item already exists in the cart
+    const existingItem = cartItems.find((item) => item.dishname === dishname);
+
+    if (existingItem) {
+      // If item exists, increase its count
+      dispatch(
+        increase({
+          dishname: existingItem.dishname,
+          cnt: existingItem.cnt + 1,
+        })
+      );
+      console.log("Item count updated in the cart");
+    } else {
+      // If item doesn't exist, add it to the cart
+      dispatch(
+        add({
+          dishname,
+          imageid,
+          Detail,
+          Rating,
+          Price,
+          cnt: 1, // Initialize the count to 1 when adding a new item
+        })
+      );
+      console.log("New item added to the cart");
+    }
   }
 
   return (
@@ -56,15 +70,5 @@ export default DishCard;
 
 
 
-// function onclickhandler(){
-  //   try {
-  //     const data=Appwriteservice.cartdocument({ dishname, imageid, Detail, Rating, Price })
-  //     if(data){
-  //       return data;
-  //     }else{
-  //       console.log('error');
-  //     }
-  //   } catch (error) {
-  //     console.log('error',error);
-  //   }
-  // }
+
+

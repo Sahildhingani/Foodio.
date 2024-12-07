@@ -52,45 +52,62 @@ function Cart() {
       </div>
 
       {/* Bill section */}
-      <div className="w-96 p-6 border-l border-gray-200 flex flex-col justify-between h-full">
-        <h1 className="text-black text-xl font-bold mb-4">BILL</h1>
+      <div className="w-96 p-6 bg-white shadow-lg rounded-lg flex flex-col justify-between h-full">
+  <h1 className="text-black text-2xl font-extrabold mb-4 border-b pb-2">
+    🧾 BILL
+  </h1>
 
-        {/* Item List */}
-        <div className="flex flex-col space-y-4 mb-4">
-          {cartItems.length > 0 ? (
-            cartItems.map((e) => (
-              <div key={e.id} className="flex justify-between items-center border-b pb-2">
-                <div className="flex flex-col">
-                  <p className="font-medium text-lg">{e.dishname}</p>
-                  <p className="text-sm text-gray-600">Quantity: {e.cnt}</p>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="font-medium text-lg">Rs. {e.Price * e.cnt}/-</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-center">No items to display in the bill.</p>
-          )}
-        </div>
-
-        {/* Total Price Section */}
-        <div className="flex justify-between items-center border-t pt-4 mt-4">
-          <p className="text-xl font-semibold">Total</p>
-          <p className="text-xl font-bold text-red-500">Rs. {totalPrice}/-</p>
-        </div>
-
-        {/* Checkout Button */}
-        <button
-          onClick={handleCheckout}
-          className="mt-6 py-2 px-4 w-full bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
+  {/* Item List */}
+  <div className="flex flex-col space-y-4 flex-1 overflow-y-auto">
+    {cartItems.length > 0 ? (
+      cartItems.map((e) => (
+        <div
+          key={e.id}
+          className="flex justify-between items-center border-b pb-3 last:border-none"
         >
-          Checkout
-        </button>
+          <div className="flex flex-col">
+            <p className="font-semibold text-lg text-gray-800">{e.dishname}</p>
+            <p className="text-sm text-gray-500">Quantity: {e.cnt}</p>
+          </div>
+          <div className="flex flex-col items-end">
+            <p className="font-semibold text-lg text-gray-700">
+              Rs. {e.Price * e.cnt}/-
+            </p>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-500 text-center mt-6">
+        🛒 No items in the cart yet. Add some delicious dishes!
+      </p>
+    )}
+  </div>
 
-        {/* Error message if user is not logged in or cart is empty */}
-        {error && <p className="text-red-600 text-center mt-4">{error}</p>}
-      </div>
+  {/* Total Price Section */}
+  {cartItems.length > 0 && (
+    <div className="flex justify-between items-center border-t pt-4 mt-4">
+      <p className="text-xl font-semibold text-gray-700">Total</p>
+      <p className="text-xl font-bold text-red-500">Rs. {totalPrice}/-</p>
+    </div>
+  )}
+
+  {/* Checkout Button */}
+  <button
+    onClick={handleCheckout}
+    className={`py-3 px-4 w-full text-white font-bold rounded-lg mt-4 ${
+      cartItems.length > 0
+        ? "bg-blue-500 hover:bg-blue-600"
+        : "bg-gray-400 cursor-not-allowed"
+    }`}
+    disabled={cartItems.length === 0}
+  >
+    {cartItems.length > 0 ? "Checkout" : "Cart is Empty"}
+  </button>
+
+  {/* Error message */}
+  {error && <p className="text-red-600 text-center mt-4">{error}</p>}
+</div>
+
     </div>
   );
 }
