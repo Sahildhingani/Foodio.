@@ -49,7 +49,7 @@ function OrderOnline() {
         <div className="h-full w-full bg-white flex flex-col items-center  px-4 sm:px-8">
             <h1 className="text-4xl font-bold text-black mt-6 sm:mt-8 md:mt-10">Menu</h1>
             <div className="flex flex-wrap gap-5 mt-8 justify-center sm:justify-start">
-                {["All Category", "Lunch", "Dinner", "Deserts", "Drinks"].map((category, index) => (
+                {["All Category", "Lunch", "Dinner", "Desserts", "Drinks"].map((category, index) => (
                     <button
                         key={index}
                         className={`h-10 w-40 sm:w-52 font-semibold text-lg rounded-md py-2 px-4 ${
