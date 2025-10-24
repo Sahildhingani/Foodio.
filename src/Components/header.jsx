@@ -6,6 +6,8 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [session, setSession] = useState(false);
   const [error, setError] = useState(null);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallBtn, setShowInstallBtn] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,7 +31,6 @@ function Header() {
       }
     };
 
-    // Check if session exists in localStorage
     const storedSession = localStorage.getItem('session');
     if (storedSession === 'true') {
       setSession(true);
@@ -40,12 +41,38 @@ function Header() {
     }
   }, []);
 
+  // Handle beforeinstallprompt for PWA install
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault(); // Prevent default mini-infobar
+      setDeferredPrompt(e); // Save the event
+      setShowInstallBtn(true); // Show the install button
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt(); // Show the install popup
+    const choiceResult = await deferredPrompt.userChoice;
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+    setDeferredPrompt(null);
+    setShowInstallBtn(false); // Hide button after prompt
+  };
+
   const handleLogout = async () => {
     try {
-      await Appwriteservice.Logout(); // Ensure Appwriteservice.Logout() properly handles logout
-      localStorage.setItem('session','false'); // Clear session from localStorage
-      setSession(false); // Update session state
-      navigate('/'); // Redirect to home page or login page after logout
+      await Appwriteservice.Logout();
+      localStorage.setItem('session','false');
+      setSession(false);
+      navigate('/');
     } catch (err) {
       console.error("Error logging out:", err);
       setError("An error occurred while logging out. Please try again.");
@@ -54,7 +81,6 @@ function Header() {
 
   const isActive = (path) => location.pathname === path;
 
-  // Reusable NavLink component to avoid code repetition
   const NavLink = ({ to, children }) => (
     <Link
       to={to}
@@ -67,7 +93,7 @@ function Header() {
   );
 
   return (
-    <div className="h-20 w-full flex justify-between items-center px-4 md:px-8 bg-white shadow-md">
+    <div className="h-20 w-full flex justify-between items-center px-4 md:px-8 bg-white shadow-md relative">
       {/* Logo */}
       <div className="flex items-center gap-2">
         <div className="bg-red-600 flex rounded-full h-12 w-12 justify-center items-center">
@@ -124,6 +150,16 @@ function Header() {
               Login
             </Link>
           )}
+
+          {/* Install Button for Mobile */}
+          {showInstallBtn && (
+            <button
+              onClick={handleInstallClick}
+              className="text-white bg-green-600 hover:bg-green-800 font-bold text-lg h-10 w-32 rounded-lg"
+            >
+              Install App
+            </button>
+          )}
         </div>
       </div>
 
@@ -147,14 +183,24 @@ function Header() {
         ) : (
           <Link
             to="/Login"
-            className="text-white  bg-red-700 hover:bg-red-900 font-bold text-lg h-10 w-20 rounded-lg pl-4 pt-1"
+            className="text-white bg-red-700 hover:bg-red-900 font-bold text-lg h-10 w-20 pl-4 pt-1 rounded-lg"
           >
             Login
           </Link>
         )}
+
+        {/* Install Button for Desktop */}
+        {showInstallBtn && (
+          <button
+            onClick={handleInstallClick}
+            className="text-white bg-green-600 hover:bg-green-800 font-bold text-lg h-10 w-32 rounded-lg"
+          >
+            Install App
+          </button>
+        )}
       </div>
 
-      {/* Error Message (if any) */}
+      {/* Error Message */}
       {error && (
         <p className="absolute top-20 left-1/2 transform -translate-x-1/2 text-red-600 text-center">
           {error}
@@ -165,12 +211,3 @@ function Header() {
 }
 
 export default Header;
-
-
-
-
-
-
-
-
-
